@@ -24,3 +24,7 @@ $ nix-shell -p nixos-anywhere
 $ nix-shell -p nixos-rebuild
 [nix-shell:~]$ nixos-rebuild switch --flake .#ax52 --target-host root@<ip_address>
 ```
+
+## Bitcoind
+
+The `bitcoind` service will be running on mainnet.
