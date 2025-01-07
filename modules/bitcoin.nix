@@ -1,4 +1,4 @@
-{ config, lib, pkgs, ... }:
+{ ... }:
 {
   services.bitcoind.signet = {
     enable = true;
@@ -13,7 +13,9 @@
     extraConfig = ''
       [signet]
       listen=1
+      noconnect=1
       server=1
+      whitebind=download,noban@0.0.0.0:38333
       whitebind=download,noban@0.0.0.0:55555
     '';
   };
@@ -29,7 +31,9 @@
     # noconnect=1
     extraConfig = ''
       listen=1
+      noconnect=1
       server=1
+      whitebind=download,noban@0.0.0.0:8333
       whitebind=download,noban@0.0.0.0:33333
     '';
   };
