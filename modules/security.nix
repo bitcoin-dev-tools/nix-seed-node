@@ -7,6 +7,8 @@
     allowPing = true;
   };
 
+  networking.nftables.enable = true;
+
   # SSH hardening
   services.openssh = {
     enable = true;

@@ -1,5 +1,8 @@
 { ... }:
-{
+let
+  whitelisted_ips = [ "148.251.128.115" "65.21.224.151" ];
+  bitcoin_ports = [ 8333 33333 38333 55555 ];
+in {
   services.bitcoind.signet = {
     enable = true;
     dbCache = 16000;
@@ -38,5 +41,36 @@
     '';
   };
 
-  networking.firewall.allowedTCPPorts = [ 8333 33333 38333 55555 ];
+  networking.nftables = {
+    enable = true;
+    ruleset = ''
+      table inet filter {
+        chain input {
+          type filter hook input priority 0;
+
+          # Allow established connections
+          ct state {established, related} accept
+
+          # Allow localhost
+          iifname lo accept
+
+          # Allow whitelisted IPs for Bitcoin ports
+          ${
+            builtins.concatStringsSep "\n          " (map (ip:
+              "ip saddr ${ip} tcp dport { ${
+                builtins.concatStringsSep ", " (map toString bitcoin_ports)
+              } } accept") whitelisted_ips)
+          }
+
+          # Drop other Bitcoin port connections
+          tcp dport { ${
+            builtins.concatStringsSep ", " (map toString bitcoin_ports)
+          } } drop
+        }
+      }
+    '';
+  };
+
+  # Still need to declare the ports as allowed
+  networking.firewall.allowedTCPPorts = bitcoin_ports;
 }
