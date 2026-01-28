@@ -1,8 +1,9 @@
-{ ... }:
+{ hostConfig, ... }:
 let
-  whitelisted_ips = [ "148.251.128.115" "65.21.224.151" "203.161.35.209" "150.228.36.148" ];
+  whitelisted_ips = [ "65.21.224.151" "203.161.35.209" "150.228.36.148" ];
   bitcoin_ports = [ 8333 33333 38333 55555 ];
-in {
+in
+{
   services.bitcoind.mainnet = {
     enable = true;
     dbCache = 16000;
@@ -16,6 +17,7 @@ in {
       listen=1
       noconnect=1
       server=1
+      externalip=${hostConfig.publicIP}
       whitebind=download,noban@0.0.0.0:8333
       whitebind=download,noban@0.0.0.0:33333
     '';
@@ -36,6 +38,7 @@ in {
       listen=1
       noconnect=1
       server=1
+      externalip=${hostConfig.publicIP}
       whitebind=download,noban@0.0.0.0:38333
       whitebind=download,noban@0.0.0.0:55555
     '';

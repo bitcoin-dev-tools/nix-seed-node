@@ -1,11 +1,11 @@
-{ ... }:
+{ hostConfig, ... }:
 {
   time.timeZone = "UTC";
 
   networking = {
     useDHCP = false;
     interfaces.eno1.ipv4.addresses = [{
-      address = "148.251.128.115";
+      address = hostConfig.publicIP;
       prefixLength = 27;
     }];
     defaultGateway = "148.251.128.97";
